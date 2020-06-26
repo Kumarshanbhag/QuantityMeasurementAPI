@@ -18,9 +18,9 @@ public class QuantityMeasurementTest {
     private MockMvc mockMvc;
 
     @Test
-    public void greetingShouldReturnDefaultMessage() throws Exception {
+    public void givenURL_WhenProper_ShouldReturnOkStatus() throws Exception {
         this.mockMvc.perform(get("/mainunit"))
         .andDo(print())
-        .andExpect(status().isNotFound());
+        .andExpect(status().isOk());
     }
 }
