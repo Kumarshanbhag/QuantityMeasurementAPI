@@ -18,9 +18,16 @@ public class QuantityMeasurementTest {
     private MockMvc mockMvc;
 
     @Test
-    public void givenURL_WhenProper_ShouldReturnOkStatus() throws Exception {
+    public void givenURLToGetMainUnits_WhenProper_ShouldReturnOkStatus() throws Exception {
         this.mockMvc.perform(get("/mainunit"))
         .andDo(print())
         .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenURLToGetSubUnits_WhenProper_ShouldReturnOkStatus() throws Exception {
+        this.mockMvc.perform(get("/subunit/LENGTH"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
