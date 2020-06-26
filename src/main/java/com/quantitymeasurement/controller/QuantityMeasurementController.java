@@ -1,15 +1,14 @@
 /*****************************************************************
  * @Purpose: To Convert Quantity Measurement Objects
  * @Author: Kumar Shanbhag
- * @Date: 18/05/2020
+ * @Date: 27/06/2020
  ****************************************************************/
 package com.quantitymeasurement.controller;
 
+import com.quantitymeasurement.model.UnitConverterDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class QuantityMeasurementController {
@@ -30,5 +29,15 @@ public class QuantityMeasurementController {
     @GetMapping ("/subunit/{mainUnitType}")
     public ResponseEntity getAllMainUnits(@PathVariable String mainUnitType) {
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * @Purpose: To Convert Value
+     * @param unitConverterDTO consists Of(Double value, 2 Subunits)
+     * @return Response Entity With Ok Status
+     */
+    @PostMapping ("/unitconvert")
+    public ResponseEntity convertUnitValue(@RequestBody UnitConverterDTO unitConverterDTO) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
