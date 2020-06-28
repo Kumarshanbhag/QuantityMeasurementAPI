@@ -5,20 +5,30 @@
  ****************************************************************/
 package com.quantitymeasurement.controller;
 
+import com.quantitymeasurement.model.ResponseDTO;
 import com.quantitymeasurement.model.UnitConverterDTO;
+import com.quantitymeasurement.service.IQuantityMeasurementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class QuantityMeasurementController {
+
+    @Autowired
+    IQuantityMeasurementService service;
+
     /**
      * @Purpose: To Return Response Entity On Succesfull Execution
      * @return Response Entity With status
      */
-    @GetMapping ("/mainunit")
-    public ResponseEntity getAllMainUnits() {
-        return new ResponseEntity(HttpStatus.OK);
+    @GetMapping ("/mainunits")
+    public ResponseEntity<ResponseDTO> getAllMainUnits() {
+        List allMainUnits = service.getAllMainUnits();
+        return new ResponseEntity<>(new ResponseDTO(1, "Recevived Main Units", allMainUnits), HttpStatus.OK);
     }
 
     /**
@@ -26,7 +36,7 @@ public class QuantityMeasurementController {
      * @param mainUnitType
      * @return Response Entity With Status Ok
      */
-    @GetMapping ("/subunit/{mainUnitType}")
+    @GetMapping ("/subunits/{mainUnitType}")
     public ResponseEntity getAllMainUnits(@PathVariable String mainUnitType) {
         return new ResponseEntity(HttpStatus.OK);
     }

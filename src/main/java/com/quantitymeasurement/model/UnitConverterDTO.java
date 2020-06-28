@@ -15,16 +15,4 @@ public class UnitConverterDTO {
         this.firstUnitType = firstUnitType;
         this.secondUnitType = secondUnitType;
     }
-
-    public double getValue() {
-        return value;
-    }
-
-    public String getFirstUnitType() {
-        return firstUnitType;
-    }
-
-    public String getSecondUnitType() {
-        return secondUnitType;
-    }
 }
