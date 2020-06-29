@@ -46,7 +46,7 @@ public class QuantityMeasurementIntegrationTest {
     @Test
     public void givenURLToGetSubUnits_WhenProper_ShouldReturnOkStatus() throws Exception {
         ResponseEntity<String> response = testTemplate.exchange(
-                createURLWithPort("/subunits/LENGTH"),
+                createURLWithPort("/subunits?unit=LENGTH"),
                 HttpMethod.GET, entity, String.class);
         Assert.assertEquals(HttpStatus.OK,response.getStatusCode());
     }
@@ -70,6 +70,16 @@ public class QuantityMeasurementIntegrationTest {
                 createURLWithPort("/mainunits"),
                 HttpMethod.GET, entity, String.class);
         String expected = gson.toJson(new ResponseDTO(1, "Recevived Main Units", mainUnits));
+        Assert.assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void givenURLToGetSubUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
+        List subUnits = Arrays.asList("FEET","INCH");
+        String expected = gson.toJson(new ResponseDTO(1, "Received All SubUnits", subUnits));
+        ResponseEntity<String> response = testTemplate.exchange(
+                createURLWithPort("/subunits?unit=LENGTH"),
+                HttpMethod.GET, entity, String.class);
         Assert.assertEquals(expected, response.getBody());
     }
 }

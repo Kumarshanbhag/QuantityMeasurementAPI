@@ -36,9 +36,10 @@ public class QuantityMeasurementController {
      * @param mainUnitType
      * @return Response Entity With Status Ok
      */
-    @GetMapping ("/subunits/{mainUnitType}")
-    public ResponseEntity getAllMainUnits(@PathVariable String mainUnitType) {
-        return new ResponseEntity(HttpStatus.OK);
+    @GetMapping ("/subunits")
+    public ResponseEntity getAllMainUnits(@RequestParam(value="unit") String mainUnitType) {
+        List allSubUnits = service.getAllSubUnits(mainUnitType);
+        return new ResponseEntity(new ResponseDTO(1,"Received All SubUnits", allSubUnits),HttpStatus.OK);
     }
 
     /**

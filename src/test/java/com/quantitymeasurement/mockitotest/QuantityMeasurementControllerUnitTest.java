@@ -43,7 +43,7 @@ public class QuantityMeasurementControllerUnitTest {
 
     @Test
     public void givenURLToGetSubUnits_WhenProper_ShouldReturnOkStatus() throws Exception {
-        this.mockMvc.perform(get("/subunits/LENGTH"))
+        this.mockMvc.perform(get("/subunits?unit=LENGTH"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -66,6 +66,19 @@ public class QuantityMeasurementControllerUnitTest {
         String expectedOutput = gson.toJson(new ResponseDTO(1, "Recevived Main Units", mainUnits));
         given(service.getAllMainUnits()).willReturn(mainUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/mainunits"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToGetSubUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
+        List subUnits = Arrays.asList("FEET","INCH");
+        String expectedOutput = gson.toJson(new ResponseDTO(1, "Received All SubUnits", subUnits));
+        given(service.getAllSubUnits("LENGTH")).willReturn(subUnits);
+        MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=LENGTH"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
