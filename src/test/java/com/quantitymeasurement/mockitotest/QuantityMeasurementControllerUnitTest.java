@@ -123,4 +123,40 @@ public class QuantityMeasurementControllerUnitTest {
         String expectedOutput = gson.toJson(responseDTO);
         Assert.assertEquals(actualOutput, expectedOutput);
     }
+
+    @Test
+    public void givenURLToConvert_WhenInchAs12AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(12, SubUnits.INCH, SubUnits.FEET);
+        ResponseDTO responseDTO = new ResponseDTO(1, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverterDTO);
+        given(service.getConvertedValue(any(UnitConverterDTO.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(responseDTO);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenInchAs60AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue5() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(60, SubUnits.FEET, SubUnits.INCH);
+        ResponseDTO responseDTO = new ResponseDTO(1, "Value Converted Successfully", 5.0);
+        String requestJson = gson.toJson(unitConverterDTO);
+        given(service.getConvertedValue(any(UnitConverterDTO.class))).willReturn(5.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(responseDTO);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
 }

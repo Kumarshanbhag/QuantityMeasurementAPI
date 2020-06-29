@@ -111,4 +111,32 @@ public class QuantityMeasurementIntegrationTest {
         String expected = gson.toJson(new ResponseDTO(1, "Value Converted Successfully", 60.0));
         Assert.assertEquals(expected, response.getBody());
     }
+
+    @Test
+    public void givenURLToGetConvertedValue_WhenInchAs12AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(12, SubUnits.INCH, SubUnits.FEET);
+        String requestJson = gson.toJson(unitConverterDTO);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+        ResponseEntity<String> response = testTemplate.exchange(
+                createURLWithPort("/unitconvert"),
+                HttpMethod.POST, entity, String.class);
+        System.out.println(response);
+        String expected = gson.toJson(new ResponseDTO(1, "Value Converted Successfully", 1.0));
+        Assert.assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void givenURLToGetConvertedValue_WhenInchAs60AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue5() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(60, SubUnits.INCH, SubUnits.FEET);
+        String requestJson = gson.toJson(unitConverterDTO);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+        ResponseEntity<String> response = testTemplate.exchange(
+                createURLWithPort("/unitconvert"),
+                HttpMethod.POST, entity, String.class);
+        System.out.println(response);
+        String expected = gson.toJson(new ResponseDTO(1, "Value Converted Successfully", 5.0));
+        Assert.assertEquals(expected, response.getBody());
+    }
 }
