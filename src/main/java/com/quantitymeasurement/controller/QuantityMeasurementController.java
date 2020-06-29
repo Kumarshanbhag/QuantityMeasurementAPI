@@ -22,8 +22,8 @@ public class QuantityMeasurementController {
     IQuantityMeasurementService service;
 
     /**
-     * @Purpose: To Return Response Entity On Succesfull Execution
      * @return Response Entity With status
+     * @Purpose: To Return Response Entity On Succesfull Execution
      */
     @GetMapping ("/mainunits")
     public ResponseEntity<ResponseDTO> getAllMainUnits() {
@@ -32,23 +32,24 @@ public class QuantityMeasurementController {
     }
 
     /**
-     * @Purpose: To Get All SubUnits Based On MainUnits
      * @param mainUnitType
      * @return Response Entity With Status Ok
+     * @Purpose: To Get All SubUnits Based On MainUnits
      */
     @GetMapping ("/subunits")
-    public ResponseEntity getAllMainUnits(@RequestParam(value="unit") String mainUnitType) {
+    public ResponseEntity getAllMainUnits(@RequestParam (value = "unit") String mainUnitType) {
         List allSubUnits = service.getAllSubUnits(mainUnitType);
-        return new ResponseEntity(new ResponseDTO(1,"Received All SubUnits", allSubUnits),HttpStatus.OK);
+        return new ResponseEntity(new ResponseDTO(1, "Received All SubUnits", allSubUnits), HttpStatus.OK);
     }
 
     /**
-     * @Purpose: To Convert Value
      * @param unitConverterDTO consists Of(Double value, 2 Subunits)
      * @return Response Entity With Ok Status
+     * @Purpose: To Convert Value
      */
     @PostMapping ("/unitconvert")
     public ResponseEntity convertUnitValue(@RequestBody UnitConverterDTO unitConverterDTO) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        double value = service.getConvertedValue(unitConverterDTO);
+        return new ResponseEntity<>(new ResponseDTO(1,"Value Converted Successfully", value), HttpStatus.OK);
     }
 }

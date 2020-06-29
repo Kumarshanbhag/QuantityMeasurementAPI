@@ -2,6 +2,7 @@ package com.quantitymeasurement.integrationtest;
 
 import com.google.gson.Gson;
 import com.quantitymeasurement.QuantitymeasurementApplication;
+import com.quantitymeasurement.enums.SubUnits;
 import com.quantitymeasurement.model.ResponseDTO;
 import com.quantitymeasurement.model.UnitConverterDTO;
 import org.junit.Assert;
@@ -48,19 +49,19 @@ public class QuantityMeasurementIntegrationTest {
         ResponseEntity<String> response = testTemplate.exchange(
                 createURLWithPort("/subunits?unit=LENGTH"),
                 HttpMethod.GET, entity, String.class);
-        Assert.assertEquals(HttpStatus.OK,response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     public void givenURLToConvert_WhenProper_ShouldReturnOkStatus() throws Exception {
-        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(1, "Feet", "Inch");
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(1, SubUnits.FEET, SubUnits.INCH);
         String requestJson = gson.toJson(unitConverterDTO);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
         ResponseEntity<String> response = testTemplate.exchange(
                 createURLWithPort("/unitconvert"),
                 HttpMethod.POST, entity, String.class);
-        Assert.assertEquals(HttpStatus.OK,response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -75,11 +76,39 @@ public class QuantityMeasurementIntegrationTest {
 
     @Test
     public void givenURLToGetSubUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("FEET","INCH");
+        List subUnits = Arrays.asList("FEET", "INCH");
         String expected = gson.toJson(new ResponseDTO(1, "Received All SubUnits", subUnits));
         ResponseEntity<String> response = testTemplate.exchange(
                 createURLWithPort("/subunits?unit=LENGTH"),
                 HttpMethod.GET, entity, String.class);
+        Assert.assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void givenURLToGetConvertedValue_WhenFeetAs1AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue12() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(1, SubUnits.FEET, SubUnits.INCH);
+        String requestJson = gson.toJson(unitConverterDTO);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+        ResponseEntity<String> response = testTemplate.exchange(
+                createURLWithPort("/unitconvert"),
+                HttpMethod.POST, entity, String.class);
+        System.out.println(response);
+        String expected = gson.toJson(new ResponseDTO(1, "Value Converted Successfully", 12.0));
+        Assert.assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void givenURLToGetConvertedValue_WhenFeetAs5AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue60() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(5, SubUnits.FEET, SubUnits.INCH);
+        String requestJson = gson.toJson(unitConverterDTO);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+        ResponseEntity<String> response = testTemplate.exchange(
+                createURLWithPort("/unitconvert"),
+                HttpMethod.POST, entity, String.class);
+        System.out.println(response);
+        String expected = gson.toJson(new ResponseDTO(1, "Value Converted Successfully", 60.0));
         Assert.assertEquals(expected, response.getBody());
     }
 }

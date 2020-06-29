@@ -2,6 +2,7 @@ package com.quantitymeasurement.mockitotest;
 
 import com.google.gson.Gson;
 import com.quantitymeasurement.controller.QuantityMeasurementController;
+import com.quantitymeasurement.enums.SubUnits;
 import com.quantitymeasurement.model.ResponseDTO;
 import com.quantitymeasurement.model.UnitConverterDTO;
 import com.quantitymeasurement.service.IQuantityMeasurementService;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,7 +52,7 @@ public class QuantityMeasurementControllerUnitTest {
 
     @Test
     public void givenURLToConvert_WhenProper_ShouldReturnOkStatus() throws Exception {
-        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(1, "Feet", "Inch");
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(1, SubUnits.FEET, SubUnits.INCH);
         String requestJson = gson.toJson(unitConverterDTO);
         this.mockMvc.perform(post("/unitconvert")
                 .accept(MediaType.APPLICATION_JSON)
@@ -83,6 +85,42 @@ public class QuantityMeasurementControllerUnitTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String actualOutput = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenFeetAs1AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue12() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(1, SubUnits.FEET, SubUnits.INCH);
+        ResponseDTO responseDTO = new ResponseDTO(1, "Value Converted Successfully", 12.0);
+        String requestJson = gson.toJson(unitConverterDTO);
+        given(service.getConvertedValue(any(UnitConverterDTO.class))).willReturn(12.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(responseDTO);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenFeetAs5AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue60() throws Exception {
+        UnitConverterDTO unitConverterDTO = new UnitConverterDTO(5, SubUnits.FEET, SubUnits.INCH);
+        ResponseDTO responseDTO = new ResponseDTO(1, "Value Converted Successfully", 60.0);
+        String requestJson = gson.toJson(unitConverterDTO);
+        given(service.getConvertedValue(any(UnitConverterDTO.class))).willReturn(60.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(responseDTO);
         Assert.assertEquals(actualOutput, expectedOutput);
     }
 }

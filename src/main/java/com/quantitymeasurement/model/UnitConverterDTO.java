@@ -5,12 +5,14 @@
  ****************************************************************/
 package com.quantitymeasurement.model;
 
+import com.quantitymeasurement.enums.SubUnits;
+
 public class UnitConverterDTO {
     public final double value;
-    public final String firstUnitType;
-    public final String secondUnitType;
+    public final SubUnits firstUnitType;
+    public final SubUnits secondUnitType;
 
-    public UnitConverterDTO(double value, String firstUnitType, String secondUnitType) {
+    public UnitConverterDTO(double value, SubUnits firstUnitType, SubUnits secondUnitType) {
         this.value = value;
         this.firstUnitType = firstUnitType;
         this.secondUnitType = secondUnitType;
