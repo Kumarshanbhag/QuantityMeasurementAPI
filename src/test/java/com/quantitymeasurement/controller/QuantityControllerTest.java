@@ -66,7 +66,7 @@ public class QuantityControllerTest {
 
     @Test
     public void givenURLToGetSubUnits_WhenGivenVolumeAsMainUnit_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("LITRE");
+        List subUnits = Arrays.asList("LITRE", "GALLON");
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits("VOLUME")).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=VOLUME"))

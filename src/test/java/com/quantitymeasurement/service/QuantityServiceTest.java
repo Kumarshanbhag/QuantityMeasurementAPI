@@ -37,6 +37,13 @@ public class QuantityServiceTest {
     }
 
     @Test
+    public void givenQuantityServiceToGetSubUnits_WhenGivenVolume_ShouldReturnListOfSubUnitsOfTypeVolume() {
+        List expectedList = Arrays.asList(SubUnits.valueOf("LITRE"), SubUnits.valueOf("GALLON"));
+        List allMainUnits = quantityService.getAllSubUnits("VOLUME");
+        Assert.assertEquals(expectedList, allMainUnits);
+    }
+
+    @Test
     public void givenQuantityServiceToGetSubUnits_WhenNotCorrect_ShouldThrowException() {
         try {
             quantityService.getAllSubUnits("LENGT");
