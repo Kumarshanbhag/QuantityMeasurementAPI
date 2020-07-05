@@ -22,7 +22,7 @@ public class QuantityServiceTest {
     //Test For Getting All Mainunits
     @Test
     public void givenQuantityServiceToGetMainUnits_WhenProper_ShouldReturnListOfMainUnits() {
-        List expectedList = Arrays.asList(MainUnits.valueOf("LENGTH"));
+        List expectedList = Arrays.asList(MainUnits.valueOf("LENGTH"), MainUnits.valueOf("VOLUME"));
         List allMainUnits = quantityService.getAllMainUnits();
         Assert.assertEquals(expectedList, allMainUnits);
     }

@@ -39,7 +39,7 @@ public class QuantityControllerTest {
     //Test For Getting All Mainunits
     @Test
     public void givenURLToGetMainUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
-        List mainUnits = Arrays.asList("LENGTH");
+        List mainUnits = Arrays.asList("LENGTH", "VOLUME");
         String expectedOutput = gson.toJson(new Response(1, "Recevived Main Units", mainUnits));
         given(service.getAllMainUnits()).willReturn(mainUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/mainunits"))
@@ -57,6 +57,19 @@ public class QuantityControllerTest {
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits("LENGTH")).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=LENGTH"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToGetSubUnits_WhenGivenVolumeAsMainUnit_ShouldReturnResponseEntity() throws Exception {
+        List subUnits = Arrays.asList("LITRE");
+        String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
+        given(service.getAllSubUnits("VOLUME")).willReturn(subUnits);
+        MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=VOLUME"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
