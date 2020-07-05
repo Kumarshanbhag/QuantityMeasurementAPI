@@ -5,13 +5,13 @@
  ****************************************************************/
 package com.quantitymeasurement.model;
 
-public class ResponseDTO {
+public class Response {
 
     private final int status;
     private final String message;
     private final Object data;
 
-    public ResponseDTO(int status, String message, Object data) {
+    public Response(int status, String message, Object data) {
         this.status = status;
         this.message = message;
         this.data = data;

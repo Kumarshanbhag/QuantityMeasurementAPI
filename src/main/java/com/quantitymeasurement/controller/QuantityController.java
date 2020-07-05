@@ -5,9 +5,9 @@
  ****************************************************************/
 package com.quantitymeasurement.controller;
 
-import com.quantitymeasurement.model.ResponseDTO;
-import com.quantitymeasurement.model.UnitConverterDTO;
-import com.quantitymeasurement.service.IQuantityMeasurementService;
+import com.quantitymeasurement.model.Response;
+import com.quantitymeasurement.model.UnitConverter;
+import com.quantitymeasurement.service.IQuantityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class QuantityMeasurementController {
+public class QuantityController {
 
     @Autowired
-    IQuantityMeasurementService service;
+    IQuantityService service;
 
     /**
      * @return Response Entity With status
      * @Purpose: To Return Response Entity On Succesfull Execution
      */
     @GetMapping ("/mainunits")
-    public ResponseEntity<ResponseDTO> getAllMainUnits() {
+    public ResponseEntity<Response> getAllMainUnits() {
         List allMainUnits = service.getAllMainUnits();
-        return new ResponseEntity<>(new ResponseDTO(1, "Recevived Main Units", allMainUnits), HttpStatus.OK);
+        return new ResponseEntity<>(new Response(1, "Recevived Main Units", allMainUnits), HttpStatus.OK);
     }
 
     /**
@@ -39,17 +39,17 @@ public class QuantityMeasurementController {
     @GetMapping ("/subunits")
     public ResponseEntity getAllMainUnits(@RequestParam (value = "unit") String mainUnitType) {
         List allSubUnits = service.getAllSubUnits(mainUnitType);
-        return new ResponseEntity(new ResponseDTO(1, "Received All SubUnits", allSubUnits), HttpStatus.OK);
+        return new ResponseEntity(new Response(1, "Received All SubUnits", allSubUnits), HttpStatus.OK);
     }
 
     /**
-     * @param unitConverterDTO consists Of(Double value, 2 Subunits)
+     * @param unitConverter consists Of(Double value, 2 Subunits)
      * @return Response Entity With Ok Status
      * @Purpose: To Convert Value
      */
     @PostMapping ("/unitconvert")
-    public ResponseEntity convertUnitValue(@RequestBody UnitConverterDTO unitConverterDTO) {
-        double value = service.getConvertedValue(unitConverterDTO);
-        return new ResponseEntity<>(new ResponseDTO(1,"Value Converted Successfully", value), HttpStatus.OK);
+    public ResponseEntity convertUnitValue(@RequestBody UnitConverter unitConverter) {
+        double value = service.getConvertedValue(unitConverter);
+        return new ResponseEntity<>(new Response(1,"Value Converted Successfully", value), HttpStatus.OK);
     }
 }

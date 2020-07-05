@@ -8,7 +8,8 @@ package com.quantitymeasurement.service;
 
 import com.quantitymeasurement.enums.MainUnits;
 import com.quantitymeasurement.enums.SubUnits;
-import com.quantitymeasurement.model.UnitConverterDTO;
+import com.quantitymeasurement.exception.QuantityException;
+import com.quantitymeasurement.model.UnitConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class QuantityMeasurementService implements IQuantityMeasurementService {
+public class QuantityService implements IQuantityService {
     /**
      * @Purpose: To Return All The MainUnits
      * @return List Of MainUnits
@@ -33,20 +34,24 @@ public class QuantityMeasurementService implements IQuantityMeasurementService {
      */
     @Override
     public List getAllSubUnits(String mainUnitType) {
-        return Arrays.stream(SubUnits.values())
+        List<SubUnits> subUnitsList = Arrays.stream(SubUnits.values())
                 .filter(subUnits -> subUnits.unitType.name().equals(mainUnitType))
                 .collect(Collectors.toList());
+        if(subUnitsList.isEmpty()) {
+            throw new QuantityException("No Main Type Found");
+        }
+        return subUnitsList;
     }
 
     /*
      * @Purpose: To Convert And Return Converted Value Based On Given 2 Subunit And Its Value
-     * @param converterDTO
+     * @param converter
      * @return Double Value If Both SubUnits Have Same MainUnit Type Or Return 0.0
      */
     @Override
-    public double getConvertedValue(UnitConverterDTO converterDTO) {
-        if (converterDTO.firstUnitType.unitType.equals(converterDTO.secondUnitType.unitType)) {
-            return (converterDTO.value * converterDTO.firstUnitType.conversionValue) / converterDTO.secondUnitType.conversionValue;
+    public double getConvertedValue(UnitConverter converter) {
+        if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
+            return (converter.value * converter.firstUnitType.conversionValue) / converter.secondUnitType.conversionValue;
         }
         return 0.0;
     }

@@ -7,12 +7,12 @@ package com.quantitymeasurement.model;
 
 import com.quantitymeasurement.enums.SubUnits;
 
-public class UnitConverterDTO {
+public class UnitConverter {
     public final double value;
     public final SubUnits firstUnitType;
     public final SubUnits secondUnitType;
 
-    public UnitConverterDTO(double value, SubUnits firstUnitType, SubUnits secondUnitType) {
+    public UnitConverter(double value, SubUnits firstUnitType, SubUnits secondUnitType) {
         this.value = value;
         this.firstUnitType = firstUnitType;
         this.secondUnitType = secondUnitType;
