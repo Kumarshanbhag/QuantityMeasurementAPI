@@ -19,6 +19,7 @@ public class QuantityServiceTest {
         quantityService = new QuantityService();
     }
 
+    //Test For Getting All Mainunits
     @Test
     public void givenQuantityServiceToGetMainUnits_WhenProper_ShouldReturnListOfMainUnits() {
         List expectedList = Arrays.asList(MainUnits.valueOf("LENGTH"));
@@ -26,9 +27,10 @@ public class QuantityServiceTest {
         Assert.assertEquals(expectedList, allMainUnits);
     }
 
+    //Test for Getting All SubUnits Based On MainUnitType
     @Test
     public void givenQuantityServiceToGetSubUnits_WhenGivenLength_ShouldReturnListOfSubUnitsOfTypeLength() {
-        List expectedList = Arrays.asList(SubUnits.valueOf("FEET"), SubUnits.valueOf("INCH"));
+        List expectedList = Arrays.asList(SubUnits.valueOf("FEET"), SubUnits.valueOf("INCH"), SubUnits.valueOf("YARD"));
         List allMainUnits = quantityService.getAllSubUnits("LENGTH");
         Assert.assertEquals(expectedList, allMainUnits);
     }
@@ -42,6 +44,7 @@ public class QuantityServiceTest {
         }
     }
 
+    //Test For Conversion Of Feet To Inch and vice Versa
     @Test
     public void givenQuantityService_WhenOFeetAndSecondUnitAsFeet_ShouldReturn0FEET() {
         UnitConverter unitConverter = new UnitConverter(0, SubUnits.FEET, SubUnits.FEET);
@@ -96,5 +99,34 @@ public class QuantityServiceTest {
         UnitConverter unitConverter = new UnitConverter(60, SubUnits.INCH, SubUnits.FEET);
         double convertedValue = quantityService.getConvertedValue(unitConverter);
         Assert.assertEquals(5, convertedValue, 0.0);
+    }
+
+    //Test For Conversion Of Yard and To Other Length Type And vice Versa
+    @Test
+    public void givenQuantityService_When3FeetAndSecondUnitAsYard_ShouldReturn1Yard() {
+        UnitConverter unitConverter = new UnitConverter(3, SubUnits.FEET, SubUnits.YARD);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When1YardAndSecondUnitAsFeet_ShouldReturn3Feet() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.FEET);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(3, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When36InchAndSecondUnitAsYard_ShouldReturn1Yard() {
+        UnitConverter unitConverter = new UnitConverter(36, SubUnits.INCH, SubUnits.YARD);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When1YardAndSecondUnitAsInch_ShouldReturn35Inch() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.INCH);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(36, convertedValue, 0.0);
     }
 }

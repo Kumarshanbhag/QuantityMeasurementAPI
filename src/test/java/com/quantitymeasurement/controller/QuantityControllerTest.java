@@ -36,6 +36,7 @@ public class QuantityControllerTest {
 
     Gson gson = new Gson();
 
+    //Test For Getting All Mainunits
     @Test
     public void givenURLToGetMainUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
         List mainUnits = Arrays.asList("LENGTH");
@@ -49,9 +50,10 @@ public class QuantityControllerTest {
         Assert.assertEquals(actualOutput, expectedOutput);
     }
 
+    //Test for Getting All SubUnits Based On MainUnitType
     @Test
     public void givenURLToGetSubUnits_WhenGivenLengthAsMainUnit_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("FEET", "INCH");
+        List subUnits = Arrays.asList("FEET", "INCH", "YARD");
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits("LENGTH")).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=LENGTH"))
@@ -74,6 +76,7 @@ public class QuantityControllerTest {
         }
     }
 
+    //Test For Conversion Of Feet To Inch and vice Versa
     @Test
     public void givenURLToGetSubUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
         List subUnits = Arrays.asList("FEET", "INCH");
@@ -143,10 +146,83 @@ public class QuantityControllerTest {
 
     @Test
     public void givenURLToConvert_WhenInchAs60AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue5() throws Exception {
-        UnitConverter unitConverter = new UnitConverter(60, SubUnits.FEET, SubUnits.INCH);
+        UnitConverter unitConverter = new UnitConverter(60, SubUnits.INCH, SubUnits.FEET);
         Response response = new Response(1, "Value Converted Successfully", 5.0);
         String requestJson = gson.toJson(unitConverter);
         given(service.getConvertedValue(any(UnitConverter.class))).willReturn(5.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    //Test For Conversion Of Yard and To Other Length Type And vice Versa
+    @Test
+    public void givenURLToConvert_WhenFeetAs3AndYardAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(3, SubUnits.FEET, SubUnits.YARD);
+        Response response = new Response(1, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenYardAs1AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue3() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.FEET);
+        Response response = new Response(1, "Value Converted Successfully", 3.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(3.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenInchAs36AndYardAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(36, SubUnits.INCH, SubUnits.YARD);
+        Response response = new Response(1, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenYardAs1AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue36() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.INCH);
+        Response response = new Response(1, "Value Converted Successfully", 36.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(36.0);
         MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(requestJson)
