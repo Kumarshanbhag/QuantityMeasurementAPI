@@ -234,4 +234,113 @@ public class QuantityControllerTest {
         String expectedOutput = gson.toJson(response);
         Assert.assertEquals(actualOutput, expectedOutput);
     }
+
+    //Test For Conversion Of Centimeter and To Other Length Type And vice Versa
+    @Test
+    public void givenURLToConvert_WhenFeetAs1AndCentimeterAsSecondUnit_ShouldReturnResponseEntityWithValue30() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.FEET, SubUnits.CM);
+        Response response = new Response(1, "Value Converted Successfully", 30.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(30.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenCentimeterAs30AndFeetAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(30, SubUnits.CM, SubUnits.FEET);
+        Response response = new Response(1, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenInchAs2AndCentimeterAsSecondUnit_ShouldReturnResponseEntityWithValue5() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(2, SubUnits.INCH, SubUnits.CM);
+        Response response = new Response(1, "Value Converted Successfully", 5.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(5.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenCentimeterAs5AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue2() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(5, SubUnits.CM, SubUnits.INCH);
+        Response response = new Response(1, "Value Converted Successfully", 2.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(2.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenYardAs1AndCentimeterAsSecondUnit_ShouldReturnResponseEntityWithValue90() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.CM);
+        Response response = new Response(1, "Value Converted Successfully", 90.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(90.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenCentimeterAs90AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(90, SubUnits.CM, SubUnits.YARD);
+        Response response = new Response(1, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
 }

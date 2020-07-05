@@ -30,7 +30,8 @@ public class QuantityServiceTest {
     //Test for Getting All SubUnits Based On MainUnitType
     @Test
     public void givenQuantityServiceToGetSubUnits_WhenGivenLength_ShouldReturnListOfSubUnitsOfTypeLength() {
-        List expectedList = Arrays.asList(SubUnits.valueOf("FEET"), SubUnits.valueOf("INCH"), SubUnits.valueOf("YARD"));
+        List expectedList = Arrays.asList(SubUnits.valueOf("FEET"), SubUnits.valueOf("INCH"),
+                SubUnits.valueOf("YARD"), SubUnits.valueOf("CM"));
         List allMainUnits = quantityService.getAllSubUnits("LENGTH");
         Assert.assertEquals(expectedList, allMainUnits);
     }
@@ -128,5 +129,48 @@ public class QuantityServiceTest {
         UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.INCH);
         double convertedValue = quantityService.getConvertedValue(unitConverter);
         Assert.assertEquals(36, convertedValue, 0.0);
+    }
+
+    //Test For Conversion Of Centimeter and To Other Length Type And vice Versa
+    @Test
+    public void givenQuantityService_When1FeetAndSecondUnitAsCentimeter_ShouldReturn30Centimeter() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.FEET, SubUnits.CM);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(30, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When30CentimeterAndSecondUnitAsFeet_ShouldReturn1Feet() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.FEET);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(3, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When2InchAndSecondUnitAsCentimeter_ShouldReturn5Centimeter() {
+        UnitConverter unitConverter = new UnitConverter(2, SubUnits.INCH, SubUnits.CM);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(5, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When5CentimeterAndSecondUnitAsInch_ShouldReturn2Inch() {
+        UnitConverter unitConverter = new UnitConverter(5, SubUnits.CM, SubUnits.INCH);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(2, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When1YardAndSecondUnitAsCentimeter_ShouldReturn90Centimeter() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.YARD, SubUnits.CM);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(90, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When90CentimeterAndSecondUnitAsInch_ShouldReturn1Yard() {
+        UnitConverter unitConverter = new UnitConverter(90, SubUnits.CM, SubUnits.YARD);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1, convertedValue, 0.0);
     }
 }

@@ -3,7 +3,8 @@ package com.quantitymeasurement.enums;
 public enum SubUnits {
     FEET(MainUnits.LENGTH, 12),
     INCH(MainUnits.LENGTH, 1),
-    YARD(MainUnits.LENGTH, 36 );
+    YARD(MainUnits.LENGTH, 36),
+    CM(MainUnits.LENGTH, 0.4);
 
     public MainUnits unitType;
     public double conversionValue;
