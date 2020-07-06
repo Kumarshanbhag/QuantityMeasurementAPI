@@ -38,7 +38,8 @@ public class QuantityServiceTest {
 
     @Test
     public void givenQuantityServiceToGetSubUnits_WhenGivenVolume_ShouldReturnListOfSubUnitsOfTypeVolume() {
-        List expectedList = Arrays.asList(SubUnits.valueOf("LITRE"), SubUnits.valueOf("GALLON"));
+        List expectedList = Arrays.asList(SubUnits.valueOf("LITRE"), SubUnits.valueOf("GALLON"),
+                SubUnits.valueOf("ML"));
         List allMainUnits = quantityService.getAllSubUnits("VOLUME");
         Assert.assertEquals(expectedList, allMainUnits);
     }
@@ -177,6 +178,46 @@ public class QuantityServiceTest {
     @Test
     public void givenQuantityService_When90CentimeterAndSecondUnitAsInch_ShouldReturn1Yard() {
         UnitConverter unitConverter = new UnitConverter(90, SubUnits.CM, SubUnits.YARD);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1, convertedValue, 0.0);
+    }
+
+    //Test For Different Main Unit Convert Values
+    @Test
+    public void givenQuantityService_When1FeetAndSecondUnitAsLiter_ShouldReturnException() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.FEET, SubUnits.LITRE);
+        try{
+            quantityService.getConvertedValue(unitConverter);
+        } catch (QuantityException e){
+            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+        }
+    }
+
+    //Test For Conversion Of Volume Units
+    @Test
+    public void givenQuantityService_When1GallonAndSecondUnitAsLitre_ShouldReturn3Point78Litre() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.GALLON, SubUnits.LITRE);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(3.78, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When3GallonAndSecondUnitAsML_ShouldReturn11340ML() {
+        UnitConverter unitConverter = new UnitConverter(3, SubUnits.GALLON, SubUnits.ML);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(11340, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When1LitreAndSecondUnitAsML_ShouldReturn1000ML() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.LITRE, SubUnits.ML);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1000, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When3Point78LitreAndSecondUnitAsGallon_ShouldReturn1Gallon() {
+        UnitConverter unitConverter = new UnitConverter(3.78, SubUnits.LITRE, SubUnits.GALLON);
         double convertedValue = quantityService.getConvertedValue(unitConverter);
         Assert.assertEquals(1, convertedValue, 0.0);
     }

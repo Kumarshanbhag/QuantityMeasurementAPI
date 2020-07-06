@@ -7,7 +7,8 @@ public enum SubUnits {
     CM(MainUnits.LENGTH, 0.4),
 
     LITRE(MainUnits.VOLUME, 1),
-    GALLON(MainUnits.VOLUME, 3.78);
+    GALLON(MainUnits.VOLUME, 3.78),
+    ML(MainUnits.VOLUME, 0.001);
 
     public MainUnits unitType;
     public double conversionValue;

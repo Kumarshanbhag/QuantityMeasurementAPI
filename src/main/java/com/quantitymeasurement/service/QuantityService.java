@@ -53,6 +53,6 @@ public class QuantityService implements IQuantityService {
         if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
             return (converter.value * converter.firstUnitType.conversionValue) / converter.secondUnitType.conversionValue;
         }
-        return 0.0;
+        throw new QuantityException("Main Unit Type Should Be Same");
     }
 }

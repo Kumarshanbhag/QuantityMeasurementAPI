@@ -66,7 +66,7 @@ public class QuantityControllerTest {
 
     @Test
     public void givenURLToGetSubUnits_WhenGivenVolumeAsMainUnit_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("LITRE", "GALLON");
+        List subUnits = Arrays.asList("LITRE", "GALLON","ML");
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits("VOLUME")).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=VOLUME"))
@@ -342,6 +342,98 @@ public class QuantityControllerTest {
     @Test
     public void givenURLToConvert_WhenCentimeterAs90AndInchAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
         UnitConverter unitConverter = new UnitConverter(90, SubUnits.CM, SubUnits.YARD);
+        Response response = new Response(1, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    //Test For Different Main Unit Convert Values
+    @Test
+    public void givenURLToConvert_WhenGallonAs1AndFeetAsSecondUnit_ShouldReturnException() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.GALLON, SubUnits.FEET);
+        String requestJson = gson.toJson(unitConverter);
+        try {
+            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException("Main unit Type Should Be Same") );
+            this.mockMvc.perform(post("/unitconvert")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(requestJson)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+        } catch (QuantityException e) {
+            Assert.assertEquals("Main unit Type Should Be Same", e.getMessage());
+        }
+    }
+
+    //Test For Conversion Of Volume Units
+    @Test
+    public void givenURLToConvert_WhenGallonAs1AndLitreAsSecondUnit_ShouldReturnResponseEntityWithValue3Point78() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.GALLON, SubUnits.LITRE);
+        Response response = new Response(1, "Value Converted Successfully", 3.78);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(3.78);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenGallonAs3AndMLAsSecondUnit_ShouldReturnResponseEntityWithValue11340() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(3, SubUnits.GALLON, SubUnits.ML);
+        Response response = new Response(1, "Value Converted Successfully", 11340.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(11340.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenLitreAs1AndMLAsSecondUnit_ShouldReturnResponseEntityWithValue1000() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(3, SubUnits.LITRE, SubUnits.ML);
+        Response response = new Response(1, "Value Converted Successfully", 1000.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1000.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenLitreAs3Point78AndGallonAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(3.78, SubUnits.LITRE, SubUnits.GALLON);
         Response response = new Response(1, "Value Converted Successfully", 1.0);
         String requestJson = gson.toJson(unitConverter);
         given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
