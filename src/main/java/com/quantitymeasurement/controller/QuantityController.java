@@ -5,6 +5,7 @@
  ****************************************************************/
 package com.quantitymeasurement.controller;
 
+import com.quantitymeasurement.enums.MainUnits;
 import com.quantitymeasurement.model.Response;
 import com.quantitymeasurement.model.UnitConverter;
 import com.quantitymeasurement.service.IQuantityService;
@@ -38,7 +39,7 @@ public class QuantityController {
      * @Purpose: To Get All SubUnits Based On MainUnits
      */
     @GetMapping ("/subunits")
-    public ResponseEntity getAllMainUnits(@RequestParam (value = "unit") String mainUnitType) {
+    public ResponseEntity getAllMainUnits(@RequestParam (value = "unit") MainUnits mainUnitType) {
         List allSubUnits = service.getAllSubUnits(mainUnitType);
         return new ResponseEntity(new Response(1, "Received All SubUnits", allSubUnits), HttpStatus.OK);
     }

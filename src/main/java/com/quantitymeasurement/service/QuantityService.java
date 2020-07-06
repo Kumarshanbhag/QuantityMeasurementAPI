@@ -33,9 +33,9 @@ public class QuantityService implements IQuantityService {
      * @return List Of SubUnits
      */
     @Override
-    public List getAllSubUnits(String mainUnitType) {
+    public List getAllSubUnits(MainUnits mainUnitType) {
         List<SubUnits> subUnitsList = Arrays.stream(SubUnits.values())
-                .filter(subUnits -> subUnits.unitType.name().equals(mainUnitType))
+                .filter(subUnits -> subUnits.unitType.equals(mainUnitType))
                 .collect(Collectors.toList());
         if(subUnitsList.isEmpty()) {
             throw new QuantityException("No Main Type Found");

@@ -22,7 +22,8 @@ public class QuantityServiceTest {
     //Test For Getting All Mainunits
     @Test
     public void givenQuantityServiceToGetMainUnits_WhenProper_ShouldReturnListOfMainUnits() {
-        List expectedList = Arrays.asList(MainUnits.valueOf("LENGTH"), MainUnits.valueOf("VOLUME"));
+        List expectedList = Arrays.asList(MainUnits.valueOf("LENGTH"), MainUnits.valueOf("VOLUME"),
+                MainUnits.valueOf("WEIGHT"), MainUnits.valueOf("AREA"));
         List allMainUnits = quantityService.getAllMainUnits();
         Assert.assertEquals(expectedList, allMainUnits);
     }
@@ -32,7 +33,7 @@ public class QuantityServiceTest {
     public void givenQuantityServiceToGetSubUnits_WhenGivenLength_ShouldReturnListOfSubUnitsOfTypeLength() {
         List expectedList = Arrays.asList(SubUnits.valueOf("FEET"), SubUnits.valueOf("INCH"),
                 SubUnits.valueOf("YARD"), SubUnits.valueOf("CM"));
-        List allMainUnits = quantityService.getAllSubUnits("LENGTH");
+        List allMainUnits = quantityService.getAllSubUnits(MainUnits.valueOf("LENGTH"));
         Assert.assertEquals(expectedList, allMainUnits);
     }
 
@@ -40,14 +41,22 @@ public class QuantityServiceTest {
     public void givenQuantityServiceToGetSubUnits_WhenGivenVolume_ShouldReturnListOfSubUnitsOfTypeVolume() {
         List expectedList = Arrays.asList(SubUnits.valueOf("LITRE"), SubUnits.valueOf("GALLON"),
                 SubUnits.valueOf("ML"));
-        List allMainUnits = quantityService.getAllSubUnits("VOLUME");
+        List allMainUnits = quantityService.getAllSubUnits(MainUnits.valueOf("VOLUME"));
+        Assert.assertEquals(expectedList, allMainUnits);
+    }
+
+    @Test
+    public void givenQuantityServiceToGetSubUnits_WhenGivenWeight_ShouldReturnListOfSubUnitsOfTypeWeight() {
+        List expectedList = Arrays.asList(SubUnits.valueOf("KG"), SubUnits.valueOf("GRAMS"),
+                SubUnits.valueOf("TONNE"));
+        List allMainUnits = quantityService.getAllSubUnits(MainUnits.valueOf("WEIGHT"));
         Assert.assertEquals(expectedList, allMainUnits);
     }
 
     @Test
     public void givenQuantityServiceToGetSubUnits_WhenNotCorrect_ShouldThrowException() {
         try {
-            quantityService.getAllSubUnits("LENGT");
+            quantityService.getAllSubUnits(MainUnits.valueOf("AREA"));
         } catch (QuantityException e) {
             Assert.assertEquals("No Main Type Found", e.getMessage());
         }
@@ -220,5 +229,20 @@ public class QuantityServiceTest {
         UnitConverter unitConverter = new UnitConverter(3.78, SubUnits.LITRE, SubUnits.GALLON);
         double convertedValue = quantityService.getConvertedValue(unitConverter);
         Assert.assertEquals(1, convertedValue, 0.0);
+    }
+
+    //Test For Conversion Of Weight Units
+    @Test
+    public void givenQuantityService_When1KGAndSecondUnitAsGrams_ShouldReturn1000Grams() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.KG, SubUnits.GRAMS);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1000, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When1TonneAndSecondUnitAsKG_ShouldReturn1000KG() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.TONNE, SubUnits.KG);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1000, convertedValue, 0.0);
     }
 }
