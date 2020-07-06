@@ -1,5 +1,5 @@
 package com.quantitymeasurement.enums;
 
 public enum MainUnits {
-    LENGTH, VOLUME, WEIGHT, AREA
+    LENGTH, VOLUME, WEIGHT, TEMPERATURE
 }

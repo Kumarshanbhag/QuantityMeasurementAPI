@@ -23,7 +23,7 @@ public class QuantityServiceTest {
     @Test
     public void givenQuantityServiceToGetMainUnits_WhenProper_ShouldReturnListOfMainUnits() {
         List expectedList = Arrays.asList(MainUnits.valueOf("LENGTH"), MainUnits.valueOf("VOLUME"),
-                MainUnits.valueOf("WEIGHT"), MainUnits.valueOf("AREA"));
+                MainUnits.valueOf("WEIGHT"), MainUnits.valueOf("TEMPERATURE"));
         List allMainUnits = quantityService.getAllMainUnits();
         Assert.assertEquals(expectedList, allMainUnits);
     }
@@ -54,12 +54,10 @@ public class QuantityServiceTest {
     }
 
     @Test
-    public void givenQuantityServiceToGetSubUnits_WhenNotCorrect_ShouldThrowException() {
-        try {
-            quantityService.getAllSubUnits(MainUnits.valueOf("AREA"));
-        } catch (QuantityException e) {
-            Assert.assertEquals("No Main Type Found", e.getMessage());
-        }
+    public void givenQuantityServiceToGetSubUnits_WhenGivenTemperature_ShouldReturnListOfSubUnitsOfTypeTemperature() {
+        List expectedList = Arrays.asList(SubUnits.valueOf("CELSIUS"), SubUnits.valueOf("FAHRENHEIT"));
+        List allMainUnits = quantityService.getAllSubUnits(MainUnits.valueOf("TEMPERATURE"));
+        Assert.assertEquals(expectedList, allMainUnits);
     }
 
     //Test For Conversion Of Feet To Inch and vice Versa
@@ -244,5 +242,20 @@ public class QuantityServiceTest {
         UnitConverter unitConverter = new UnitConverter(1, SubUnits.TONNE, SubUnits.KG);
         double convertedValue = quantityService.getConvertedValue(unitConverter);
         Assert.assertEquals(1000, convertedValue, 0.0);
+    }
+
+    //Test For Conversion Of Temperature Units
+    @Test
+    public void givenQuantityService_When212FahrenheitAndSecondUnitAsCelsius_ShouldReturn100Celsius() {
+        UnitConverter unitConverter = new UnitConverter(212, SubUnits.FAHRENHEIT, SubUnits.CELSIUS);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(100, convertedValue, 0.0);
+    }
+
+    @Test
+    public void givenQuantityService_When100CelsiusAndSecondUnitAsFahrenheit_ShouldReturn212Fahrenheit() {
+        UnitConverter unitConverter = new UnitConverter(100, SubUnits.CELSIUS, SubUnits.FAHRENHEIT);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(212, convertedValue, 0.0);
     }
 }

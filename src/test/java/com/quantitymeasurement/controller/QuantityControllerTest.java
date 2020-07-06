@@ -40,7 +40,7 @@ public class QuantityControllerTest {
     //Test For Getting All Mainunits
     @Test
     public void givenURLToGetMainUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
-        List mainUnits = Arrays.asList("LENGTH", "VOLUME");
+        List mainUnits = Arrays.asList("LENGTH", "VOLUME", "WEIGHT", "TEMPERATURE");
         String expectedOutput = gson.toJson(new Response(1, "Recevived Main Units", mainUnits));
         given(service.getAllMainUnits()).willReturn(mainUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/mainunits"))
@@ -54,7 +54,7 @@ public class QuantityControllerTest {
     //Test for Getting All SubUnits Based On MainUnitType
     @Test
     public void givenURLToGetSubUnits_WhenGivenLengthAsMainUnit_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("FEET", "INCH", "YARD");
+        List subUnits = Arrays.asList("FEET", "INCH", "YARD", "CM");
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits(MainUnits.valueOf("LENGTH"))).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=LENGTH"))
@@ -67,7 +67,7 @@ public class QuantityControllerTest {
 
     @Test
     public void givenURLToGetSubUnits_WhenGivenVolumeAsMainUnit_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("LITRE", "GALLON","ML");
+        List subUnits = Arrays.asList("LITRE", "GALLON", "ML");
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits(MainUnits.valueOf("VOLUME"))).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=VOLUME"))
@@ -80,7 +80,7 @@ public class QuantityControllerTest {
 
     @Test
     public void givenURLToGetSubUnits_WhenGivenWeightAsMainUnit_ShouldReturnResponseEntity() throws Exception {
-        List subUnits = Arrays.asList("KG", "GRAMS","TONNE");
+        List subUnits = Arrays.asList("KG", "GRAMS", "TONNE");
         String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
         given(service.getAllSubUnits(MainUnits.valueOf("WEIGHT"))).willReturn(subUnits);
         MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=WEIGHT"))
@@ -91,19 +91,18 @@ public class QuantityControllerTest {
         Assert.assertEquals(actualOutput, expectedOutput);
     }
 
-    //Test For Exception When MAinUnit Of SubUnit Not Found
     @Test
-    public void givenURLToGetSubUnits_WhenNotCorrect_ShouldThrowException() throws Exception {
-        try {
-            given(service.getAllSubUnits(any(MainUnits.class))).willThrow(new QuantityException("No Main Type Found"));
-            this.mockMvc.perform(get("/subunits?unit=MAINUNIT"))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest());
-        } catch (QuantityException e) {
-            Assert.assertEquals("No Main Type Found", e.getMessage());
-        }
+    public void givenURLToGetSubUnits_WhenGivenTemperatureAsMainUnit_ShouldReturnResponseEntity() throws Exception {
+        List subUnits = Arrays.asList("FAHRENHEIT", "CELSIUS");
+        String expectedOutput = gson.toJson(new Response(1, "Received All SubUnits", subUnits));
+        given(service.getAllSubUnits(MainUnits.valueOf("TEMPERATURE"))).willReturn(subUnits);
+        MvcResult mvcResult = this.mockMvc.perform(get("/subunits?unit=TEMPERATURE"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(actualOutput, expectedOutput);
     }
-
     //Test For Conversion Of Feet To Inch and vice Versa
     @Test
     public void givenURLToGetSubUnits_WhenProper_ShouldReturnResponseEntity() throws Exception {
@@ -378,7 +377,7 @@ public class QuantityControllerTest {
         UnitConverter unitConverter = new UnitConverter(1, SubUnits.GALLON, SubUnits.FEET);
         String requestJson = gson.toJson(unitConverter);
         try {
-            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException("Main unit Type Should Be Same") );
+            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException("Main unit Type Should Be Same"));
             this.mockMvc.perform(post("/unitconvert")
                     .accept(MediaType.APPLICATION_JSON)
                     .content(requestJson)
@@ -482,12 +481,50 @@ public class QuantityControllerTest {
         String expectedOutput = gson.toJson(response);
         Assert.assertEquals(actualOutput, expectedOutput);
     }
+
     @Test
     public void givenURLToConvert_WhenTonneAs1AndKGAsSecondUnit_ShouldReturnResponseEntityWithValue1000() throws Exception {
         UnitConverter unitConverter = new UnitConverter(1, SubUnits.TONNE, SubUnits.KG);
         Response response = new Response(1, "Value Converted Successfully", 1000.0);
         String requestJson = gson.toJson(unitConverter);
         given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1000.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    //Test For Conversion Of Temperature Units
+    @Test
+    public void givenURLToConvert_WhenFahrenheitAs212AndCelsiusAsSecondUnit_ShouldReturnResponseEntityWithValue100() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(212, SubUnits.FAHRENHEIT, SubUnits.CELSIUS);
+        Response response = new Response(1, "Value Converted Successfully", 100.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(100.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
+    public void givenURLToConvert_WhenCelsiusAs100AndFahrenheitAsSecondUnit_ShouldReturnResponseEntityWithValue212() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(100, SubUnits.CELSIUS, SubUnits.FAHRENHEIT);
+        Response response = new Response(1, "Value Converted Successfully", 212.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(212.0);
         MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(requestJson)

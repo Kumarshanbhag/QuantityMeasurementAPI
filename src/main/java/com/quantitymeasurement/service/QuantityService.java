@@ -37,9 +37,6 @@ public class QuantityService implements IQuantityService {
         List<SubUnits> subUnitsList = Arrays.stream(SubUnits.values())
                 .filter(subUnits -> subUnits.unitType.equals(mainUnitType))
                 .collect(Collectors.toList());
-        if(subUnitsList.isEmpty()) {
-            throw new QuantityException("No Main Type Found");
-        }
         return subUnitsList;
     }
 
@@ -50,8 +47,21 @@ public class QuantityService implements IQuantityService {
      */
     @Override
     public double getConvertedValue(UnitConverter converter) {
-        if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
+        if (converter.firstUnitType.unitType.equals(MainUnits.TEMPERATURE)) {
+            return conversionForTemperatureUnits(converter);
+        }
+        else if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
             return (converter.value * converter.firstUnitType.conversionValue) / converter.secondUnitType.conversionValue;
+        }
+        throw new QuantityException("Main Unit Type Should Be Same");
+    }
+
+    private double conversionForTemperatureUnits(UnitConverter converter) {
+        if (converter.firstUnitType.equals(SubUnits.CELSIUS) && converter.secondUnitType.equals(SubUnits.FAHRENHEIT)) {
+            return ((converter.value * converter.firstUnitType.conversionValue) + 32);
+        }
+        if (converter.firstUnitType.equals(SubUnits.FAHRENHEIT) && converter.secondUnitType.equals(SubUnits.CELSIUS)) {
+            return ((converter.value - 32) * converter.firstUnitType.conversionValue);
         }
         throw new QuantityException("Main Unit Type Should Be Same");
     }

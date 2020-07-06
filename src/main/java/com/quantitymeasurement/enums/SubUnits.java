@@ -12,7 +12,10 @@ public enum SubUnits {
 
     KG(MainUnits.WEIGHT, 1),
     GRAMS(MainUnits.WEIGHT, 0.001),
-    TONNE(MainUnits.WEIGHT, 1000 );
+    TONNE(MainUnits.WEIGHT, 1000),
+
+    CELSIUS(MainUnits.TEMPERATURE, 1.8),
+    FAHRENHEIT(MainUnits.TEMPERATURE, 0.5555555555555556);
 
     public MainUnits unitType;
     public double conversionValue;
