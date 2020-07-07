@@ -200,6 +200,56 @@ public class QuantityServiceTest {
         }
     }
 
+    @Test
+    public void givenQuantityService_When1FeetAndSecondUnitAsKG_ShouldReturnException() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.FEET, SubUnits.KG);
+        try{
+            quantityService.getConvertedValue(unitConverter);
+        } catch (QuantityException e){
+            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenQuantityService_When1FeetAndSecondUnitAsCelsius_ShouldReturnException() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.FEET, SubUnits.CELSIUS);
+        try{
+            quantityService.getConvertedValue(unitConverter);
+        } catch (QuantityException e){
+            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenQuantityService_When1LitreAndSecondUnitAsKG_ShouldReturnException() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.LITRE, SubUnits.KG);
+        try{
+            quantityService.getConvertedValue(unitConverter);
+        } catch (QuantityException e){
+            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenQuantityService_When1LitreAndSecondUnitAsCelsius_ShouldReturnException() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.LITRE, SubUnits.CELSIUS);
+        try{
+            quantityService.getConvertedValue(unitConverter);
+        } catch (QuantityException e){
+            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenQuantityService_When1KGAndSecondUnitAsCelsius_ShouldReturnException() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.KG, SubUnits.CELSIUS);
+        try{
+            quantityService.getConvertedValue(unitConverter);
+        } catch (QuantityException e){
+            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+        }
+    }
+
     //Test For Conversion Of Volume Units
     @Test
     public void givenQuantityService_When1GallonAndSecondUnitAsLitre_ShouldReturn3Point78Litre() {

@@ -24,34 +24,34 @@ public class QuantityController {
     IQuantityService service;
 
     /**
-     * @return Response Entity With status
      * @Purpose: To Return Response Entity On Succesfull Execution
+     * @return Response Entity With status
      */
     @GetMapping ("/mainunits")
     public ResponseEntity<Response> getAllMainUnits() {
         List allMainUnits = service.getAllMainUnits();
-        return new ResponseEntity<>(new Response(1, "Recevived Main Units", allMainUnits), HttpStatus.OK);
+        return new ResponseEntity<>(new Response(200, "Recevived Main Units", allMainUnits), HttpStatus.OK);
     }
 
     /**
+     * @Purpose: To Get All SubUnits Based On MainUnits
      * @param mainUnitType
      * @return Response Entity With Status Ok
-     * @Purpose: To Get All SubUnits Based On MainUnits
      */
     @GetMapping ("/subunits")
     public ResponseEntity getAllMainUnits(@RequestParam (value = "unit") MainUnits mainUnitType) {
         List allSubUnits = service.getAllSubUnits(mainUnitType);
-        return new ResponseEntity(new Response(1, "Received All SubUnits", allSubUnits), HttpStatus.OK);
+        return new ResponseEntity(new Response(200, "Received All SubUnits", allSubUnits), HttpStatus.OK);
     }
 
     /**
+     * @Purpose: To Convert Value
      * @param unitConverter consists Of(Double value, 2 Subunits)
      * @return Response Entity With Ok Status
-     * @Purpose: To Convert Value
      */
     @PostMapping ("/unitconvert")
     public ResponseEntity convertUnitValue(@RequestBody UnitConverter unitConverter) {
         double value = service.getConvertedValue(unitConverter);
-        return new ResponseEntity<>(new Response(1,"Value Converted Successfully", value), HttpStatus.OK);
+        return new ResponseEntity<>(new Response(200,"Value Converted Successfully", value), HttpStatus.OK);
     }
 }
