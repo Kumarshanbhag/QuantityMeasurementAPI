@@ -296,6 +296,13 @@ public class QuantityServiceTest {
 
     //Test For Conversion Of Temperature Units
     @Test
+    public void givenQuantityService_When1FahrenheitAndSecondUnitAsFahrenheit_ShouldReturn1Fahrenheit() {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.FAHRENHEIT, SubUnits.FAHRENHEIT);
+        double convertedValue = quantityService.getConvertedValue(unitConverter);
+        Assert.assertEquals(1, convertedValue, 0.0);
+    }
+
+    @Test
     public void givenQuantityService_When212FahrenheitAndSecondUnitAsCelsius_ShouldReturn100Celsius() {
         UnitConverter unitConverter = new UnitConverter(212, SubUnits.FAHRENHEIT, SubUnits.CELSIUS);
         double convertedValue = quantityService.getConvertedValue(unitConverter);

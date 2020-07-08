@@ -505,6 +505,24 @@ public class QuantityControllerTest {
 
     //Test For Conversion Of Temperature Units
     @Test
+    public void givenURLToConvert_WhenCelsiusAs1AndCelsiusAsSecondUnit_ShouldReturnResponseEntityWithValue1() throws Exception {
+        UnitConverter unitConverter = new UnitConverter(1, SubUnits.CELSIUS, SubUnits.CELSIUS);
+        Response response = new Response(200, "Value Converted Successfully", 1.0);
+        String requestJson = gson.toJson(unitConverter);
+        given(service.getConvertedValue(any(UnitConverter.class))).willReturn(1.0);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unitconvert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualOutput = mvcResult.getResponse().getContentAsString();
+        String expectedOutput = gson.toJson(response);
+        Assert.assertEquals(actualOutput, expectedOutput);
+    }
+
+    @Test
     public void givenURLToConvert_WhenFahrenheitAs212AndCelsiusAsSecondUnit_ShouldReturnResponseEntityWithValue100() throws Exception {
         UnitConverter unitConverter = new UnitConverter(212, SubUnits.FAHRENHEIT, SubUnits.CELSIUS);
         Response response = new Response(200, "Value Converted Successfully", 100.0);

@@ -40,7 +40,7 @@ public class QuantityService implements IQuantityService {
         return subUnitsList;
     }
 
-    /*
+    /**
      * @Purpose: To Convert And Return Converted Value Based On Given 2 Subunit And Its Value
      * @param converter
      * @return Double Value If Both SubUnits Have Same MainUnit Type Or Return 0.0
@@ -49,14 +49,21 @@ public class QuantityService implements IQuantityService {
     public double getConvertedValue(UnitConverter converter) {
         if (converter.firstUnitType.unitType.equals(MainUnits.TEMPERATURE)) {
             return conversionForTemperatureUnits(converter);
-        }
-        else if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
+        } else if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
             return (converter.value * converter.firstUnitType.conversionValue) / converter.secondUnitType.conversionValue;
         }
         throw new QuantityException("Main Unit Type Should Be Same");
     }
 
+    /**
+     * @Purpose: For conversion Of Temperature
+     * @param converter
+     * @return
+     */
     private double conversionForTemperatureUnits(UnitConverter converter) {
+        if (converter.firstUnitType.equals(converter.secondUnitType)) {
+            return converter.value;
+        }
         if (converter.firstUnitType.equals(SubUnits.CELSIUS) && converter.secondUnitType.equals(SubUnits.FAHRENHEIT)) {
             return ((converter.value * converter.firstUnitType.conversionValue) + 32);
         }
