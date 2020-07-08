@@ -5,10 +5,16 @@
  ****************************************************************/
 package com.quantitymeasurement.model;
 
-public class Response {
+import io.swagger.annotations.ApiModelProperty;
 
+public class Response {
+    @ApiModelProperty(notes = "Status Of Opertaion")
     private final int status;
+
+    @ApiModelProperty(notes = "Operation Message")
     private final String message;
+
+    @ApiModelProperty(notes = "Opertaion Result")
     private final Object data;
 
     public Response(int status, String message, Object data) {
