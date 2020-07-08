@@ -196,7 +196,7 @@ public class QuantityServiceTest {
         try{
             quantityService.getConvertedValue(unitConverter);
         } catch (QuantityException e){
-            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+            Assert.assertEquals("Main Unit Type Should Be Same",e.type.message);
         }
     }
 
@@ -206,7 +206,7 @@ public class QuantityServiceTest {
         try{
             quantityService.getConvertedValue(unitConverter);
         } catch (QuantityException e){
-            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+            Assert.assertEquals("Main Unit Type Should Be Same",e.type.message);
         }
     }
 
@@ -216,7 +216,7 @@ public class QuantityServiceTest {
         try{
             quantityService.getConvertedValue(unitConverter);
         } catch (QuantityException e){
-            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+            Assert.assertEquals("Main Unit Type Should Be Same",e.type.message);
         }
     }
 
@@ -226,7 +226,7 @@ public class QuantityServiceTest {
         try{
             quantityService.getConvertedValue(unitConverter);
         } catch (QuantityException e){
-            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+            Assert.assertEquals("Main Unit Type Should Be Same",e.type.message);
         }
     }
 
@@ -236,7 +236,7 @@ public class QuantityServiceTest {
         try{
             quantityService.getConvertedValue(unitConverter);
         } catch (QuantityException e){
-            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+            Assert.assertEquals("Main Unit Type Should Be Same",e.type.message);
         }
     }
 
@@ -246,7 +246,7 @@ public class QuantityServiceTest {
         try{
             quantityService.getConvertedValue(unitConverter);
         } catch (QuantityException e){
-            Assert.assertEquals("Main Unit Type Should Be Same",e.getMessage());
+            Assert.assertEquals("Main Unit Type Should Be Same",e.type.message);
         }
     }
 

@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class QuantityExceptionHandler {
     @ExceptionHandler (QuantityException.class)
     public ResponseEntity QuantityException(QuantityException e) {
-        return new ResponseEntity(new Response(400, e.getMessage(), ""), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new Response(400, e.type.message, ""), HttpStatus.BAD_REQUEST);
     }
 }

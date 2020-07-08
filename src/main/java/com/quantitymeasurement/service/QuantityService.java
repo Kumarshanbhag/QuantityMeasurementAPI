@@ -52,7 +52,7 @@ public class QuantityService implements IQuantityService {
         } else if (converter.firstUnitType.unitType.equals(converter.secondUnitType.unitType)) {
             return (converter.value * converter.firstUnitType.conversionValue) / converter.secondUnitType.conversionValue;
         }
-        throw new QuantityException("Main Unit Type Should Be Same");
+        throw new QuantityException(QuantityException.ExceptionType.INVALID_CONVERSION);
     }
 
     /**
@@ -70,6 +70,6 @@ public class QuantityService implements IQuantityService {
         if (converter.firstUnitType.equals(SubUnits.FAHRENHEIT) && converter.secondUnitType.equals(SubUnits.CELSIUS)) {
             return ((converter.value - 32) * converter.firstUnitType.conversionValue);
         }
-        throw new QuantityException("Main Unit Type Should Be Same");
+        throw new QuantityException(QuantityException.ExceptionType.INVALID_CONVERSION);
     }
 }

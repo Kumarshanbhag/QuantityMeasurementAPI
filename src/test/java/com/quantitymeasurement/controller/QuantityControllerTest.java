@@ -377,10 +377,10 @@ public class QuantityControllerTest {
     public void givenURLToConvert_WhenGallonAs1AndFeetAsSecondUnit_ShouldReturnException() throws Exception {
         UnitConverter unitConverter = new UnitConverter(1, SubUnits.GALLON, SubUnits.FEET);
         String requestJson = gson.toJson(unitConverter);
-        String expectedOutput = gson.toJson(new Response(400, "Main unit Type Should Be Same", ""));
+        String expectedOutput = gson.toJson(new Response(400, "Main Unit Type Should Be Same", ""));
         MvcResult mvcResult = null;
         try {
-            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException("Main unit Type Should Be Same"));
+            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException(QuantityException.ExceptionType.INVALID_CONVERSION));
             mvcResult = this.mockMvc.perform(post("/unitconvert")
                     .accept(MediaType.APPLICATION_JSON)
                     .content(requestJson)
