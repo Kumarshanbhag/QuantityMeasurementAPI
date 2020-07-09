@@ -1,6 +1,7 @@
 package com.quantitymeasurement.controller;
 
 import com.google.gson.Gson;
+import com.quantitymeasurement.enums.ExceptionType;
 import com.quantitymeasurement.enums.MainUnits;
 import com.quantitymeasurement.enums.SubUnits;
 import com.quantitymeasurement.exception.QuantityException;
@@ -380,7 +381,7 @@ public class QuantityControllerTest {
         String expectedOutput = gson.toJson(new Response(400, "Main Unit Type Should Be Same", ""));
         MvcResult mvcResult = null;
         try {
-            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException(QuantityException.ExceptionType.INVALID_CONVERSION));
+            given(service.getConvertedValue(any(UnitConverter.class))).willThrow(new QuantityException(ExceptionType.INVALID_CONVERSION));
             mvcResult = this.mockMvc.perform(post("/unitconvert")
                     .accept(MediaType.APPLICATION_JSON)
                     .content(requestJson)
@@ -388,7 +389,8 @@ public class QuantityControllerTest {
                     .andDo(print())
                     .andExpect(status().isBadRequest())
                     .andReturn();
-        } catch (QuantityException e) { }
+        } catch (QuantityException e) {
+        }
         String actualOutput = mvcResult.getResponse().getContentAsString();
         Assert.assertEquals(expectedOutput, actualOutput);
     }
